@@ -1,4 +1,4 @@
-﻿var ctx, fillStyle = '', DrawingTypes = '', canvas, rect = {}, strokeStyle = '';
+﻿var ctx, fillStyle = '', DrawingTypes = '', canvas, rect = {}, strokeStyle = '', lineWidth = 1;
 
 $(document).ready(function () {
     canvas = document.getElementById("the-canvas");
@@ -27,6 +27,7 @@ $('body').on('keydown',
                 break;
         }
         draw();
+        saveImage();
     });
 
 
@@ -38,13 +39,15 @@ function draw() {
     ctx.beginPath();
     ctx.fillStyle = fillStyle;
     ctx.strokeStyle = strokeStyle;
+    ctx.lineWidth = lineWidth;
 
     switch (DrawingTypes) {
         case "FillRect":
             ctx.rect(rect.startX, rect.startY, rect.w, rect.h);
             break;
         case "FillCircle":
-            ctx.arc(rect.startX, rect.startY, rect.radiusNew, rect.w, rect.h);
+            ctx.arc(rect.startX, rect.startY, rect.radiusNew, rect.w, rect.h, false);
+
             break;
         case "FillEllipse":
             ctx.ellipse(rect.startX, rect.startY, rect.rx, rect.ry, 0, 0, Math.PI * 2);
@@ -60,14 +63,15 @@ function drawCircle() {
     //Daire
     DrawingTypes = "FillCircle";
     rect = {
-        startX: 5,
-        startY: 5,
-        radiusNew: 25,
+        startX: canvas.width/2,
+        startY: canvas.height / 2,
+        radiusNew: 70,
         w: 0,
         h: (2 * Math.PI)
     };
-    fillStyle = 'green';
-    strokeStyle = 'orange';
+    fillStyle = 'orange';
+    strokeStyle = 'green';
+    lineWidth = 5;
 }
 
 function drawSquare() {
@@ -95,6 +99,7 @@ function drawOval() {
         ry: 75
     };
     fillStyle = 'green';
+    strokeStyle = 'red';
 }
 
 
@@ -102,7 +107,9 @@ function drawTriangle() {
     ////Ucgen
     DrawingTypes = "FreeDraw";
     ctx.beginPath();
-    ctx.fillStyle = 'red';
+    ctx.fillStyle = 'yellow';
+    ctx.strokeStyle = 'blue';
+    ctx.lineWidth = 5;
     ctx.moveTo(0, 0);
     ctx.lineTo(200, 0);
     ctx.lineTo(100, 200);
@@ -121,7 +128,7 @@ function saveImage() {
         contentType: 'application/json; charset=utf-8',
         dataType: 'json',
         success: function (msg) {
-            alert('Image saved to your root Folder !');
+            console.log(msg);
         }
     });
 
